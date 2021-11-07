@@ -8,86 +8,56 @@ namespace Aircompany
 {
     public class Airport
     {
-        public List<Plane> Planes;
+        public List<Plane> Planes { get; set; }
 
         public Airport(IEnumerable<Plane> planes)
         {
             Planes = planes.ToList();
         }
 
-        public List<PassengerPlane> GetPassengersPlanes()
-        {
-            List<PassengerPlane> passengerPlanes = new List<PassengerPlane>();
-            for (int i=0; i < Planes.Count; i++)
-            {
-                if (Planes[i].GetType() == typeof(PassengerPlane))
-                {
-                    passengerPlanes.Add((PassengerPlane)Planes[i]);
-                }
-            }
-            return passengerPlanes;
-        }
-
-        public List<MilitaryPlane> GetMilitaryPlanes()
-        {
-            List<MilitaryPlane> militaryPlanes = new List<MilitaryPlane>();
-            for (int i = 0; i < Planes.Count; i++)
-            {
-                if (Planes[i].GetType() == typeof(MilitaryPlane))
-                {
-                    militaryPlanes.Add((MilitaryPlane)Planes[i]);
-                }
-            }
-            return militaryPlanes;
-        }
-
-        public PassengerPlane GetPassengerPlaneWithMaxPassengersCapacity()
-        {
-            List<PassengerPlane> passengerPlanes = GetPassengersPlanes();
-            return passengerPlanes.Aggregate((w, x) => w.PassengersCapacityIs() > x.PassengersCapacityIs() ? w : x);             
-        }
-
-        public List<MilitaryPlane> GetTransportMilitaryPlanes()
-        {
-            List<MilitaryPlane> transportMilitaryPlanes = new List<MilitaryPlane>();
-            List<MilitaryPlane> militaryPlanes = GetMilitaryPlanes();
-            for (int i = 0; i < militaryPlanes.Count; i++)
-            {
-                MilitaryPlane plane = militaryPlanes[i];
-                if (plane.PlaneTypeIs() == MilitaryType.TRANSPORT)
-                {
-                    transportMilitaryPlanes.Add(plane);
-                }
-            }
-
-            return transportMilitaryPlanes;
-        }
-
-        public Airport SortByMaxDistance()
-        {
-            return new Airport(Planes.OrderBy(w => w.MAXFlightDistance()));
-        }
-
-        public Airport SortByMaxSpeed()
-        {
-            return new Airport(Planes.OrderBy(w => w.GetMS()));
-        }
-
-        public Airport SortByMaxLoadCapacity()
-        {
-            return new Airport(Planes.OrderBy(w => w.MAXLoadCapacity()));
-        }
-
-
         public IEnumerable<Plane> GetPlanes()
         {
             return Planes;
         }
 
+        public List<PassengerPlane> GetPassengersPlanes()
+        {
+            return Planes.OfType<PassengerPlane>().ToList();
+        }
+
+        public List<MilitaryPlane> GetMilitaryPlanes()
+        {
+            return Planes.OfType<MilitaryPlane>().ToList();
+        }
+
+        public PassengerPlane GetPassengerPlaneWithMaxPassengersCapacity()// не уверена, что это будет наилучшим решением. Возможно правильнее было бы разделить два 
+        {
+            return GetPassengersPlanes().First(plane => plane.PassengersCapacity == GetPassengersPlanes().Max(passengerPlane => passengerPlane.PassengersCapacity));
+        }
+        public List<MilitaryPlane> GetTransportMilitaryPlanes()
+        {
+            return Planes.OfType<MilitaryPlane>().Where(plane => plane.MilitaryPlaneType == MilitaryType.TRANSPORT).ToList();
+        }
+
+        public Airport SortPlanesByMaxDistance()
+        {
+            return new Airport(Planes.OrderBy(plane => plane.MaxFlightDistance));
+        }
+
+        public Airport SortPlanesByMaxSpeed()
+        {
+            return new Airport(Planes.OrderBy(plane => plane.MaxSpeed));
+        }
+
+        public Airport SortPlanesByMaxLoadCapacity()
+        {
+            return new Airport(Planes.OrderBy(plane => plane.MaxLoadCapacity));
+        }
+
         public override string ToString()
         {
             return "Airport{" +
-                    "planes=" + string.Join(", ", Planes.Select(x => x.GetModel())) +
+                    "planes=" + string.Join(", ", Planes.Select(plane => plane.Model)) +
                     '}';
         }
     }
