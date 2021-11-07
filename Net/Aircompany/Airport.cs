@@ -30,9 +30,9 @@ namespace Aircompany
             return Planes.OfType<MilitaryPlane>().ToList();
         }
 
-        public PassengerPlane GetPassengerPlaneWithMaxPassengersCapacity()// не уверена, что это будет наилучшим решением. Возможно правильнее было бы разделить два 
+        public PassengerPlane GetPassengerPlaneWithMaxPassengersCapacity()
         {
-            return GetPassengersPlanes().First(plane => plane.PassengersCapacity == GetPassengersPlanes().Max(passengerPlane => passengerPlane.PassengersCapacity));
+            return GetPassengersPlanes().OrderByDescending(plane => plane.PassengersCapacity).First();
         }
         public List<MilitaryPlane> GetTransportMilitaryPlanes()
         {
