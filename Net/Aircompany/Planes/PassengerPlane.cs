@@ -16,8 +16,7 @@ namespace Aircompany.Planes
         {
             var plane = obj as PassengerPlane;
             return plane != null &&
-                   base.Equals(obj) &&
-                   PassengersCapacity == plane.PassengersCapacity;
+                   this.GetHashCode() == plane.GetHashCode();
         }
 
         public override int GetHashCode()

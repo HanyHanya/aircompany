@@ -36,7 +36,7 @@ namespace Aircompany
         }
         public List<MilitaryPlane> GetTransportMilitaryPlanes()
         {
-            return Planes.OfType<MilitaryPlane>().Where(plane => plane.MilitaryPlaneType == MilitaryType.TRANSPORT).ToList();
+            return Planes.OfType<MilitaryPlane>().Where(plane => plane.MilitaryPlaneType == MilitaryType.Transport).ToList();
         }
 
         public Airport SortPlanesByMaxDistance()

@@ -1,10 +1,10 @@
 ﻿namespace Aircompany.Models
 {
-    public enum ClassificationLevel
+    public enum ClassificationLevel //регистр, первая буква болльшой ctrl+u
     {
-        UNCLASSIFIED,
-        CONFIDENTIAL,
-        SECRET,
-        TOP_SECRET
+        Unclassified,
+        Confidential,
+        Secret,
+        TopSecret
     }
 }
